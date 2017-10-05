@@ -40,7 +40,7 @@ sleep(2)
       begin
         check = RestClient.get("http://" + sub.to_s + "." + base)
          if check.code == 200 || check.code == 302 || check.code == 301 
-           puts "Subdomain Found := #{sub.to_s}"+"#{base}"
+           puts "Subdomain Found := #{sub.to_s}"+"."+"#{base}"
          end 
      rescue
       next
