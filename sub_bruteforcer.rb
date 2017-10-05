@@ -10,8 +10,8 @@ require 'rest-client'
      end
 
 if base.nil?
-   puts "Usage:\n"
-   puts "ruby sub_bruteforcer.rb <example.com>"
+   puts "\nUsage:\n"
+   puts "ruby sub_bruteforcer.rb <example.com>\n"
    exit
 end
 
