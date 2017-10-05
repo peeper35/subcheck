@@ -5,14 +5,14 @@ require 'rest-client'
    arr = []
    arg = ARGV
 
-     for a in arg  
-      base = "." + a
-     end
-
 if arg.nil?
    puts "Usage:\n"
    puts "ruby sub_bruteforcer.rb <example.com>"
 end
+
+     for a in arg  
+      base = "." + a
+     end
 
 puts "\n"
 puts"--- --- --- --- --- --- --- --- --- --- --- --- --- --- ---"
