@@ -10,6 +10,8 @@ if arg.nil?
    puts "ruby sub_bruteforcer.rb <example.com>"
 end
 
+else
+
      for a in arg  
       base = "." + a
      end
@@ -49,3 +51,4 @@ sleep(2)
 
 puts "\nCompleted."
 sleep(4)
+end
