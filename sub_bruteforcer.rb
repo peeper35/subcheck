@@ -11,7 +11,7 @@ require 'rest-client'
 
 if arg.nil?
    puts "Usage:\n"
-   puts "uby sub_bruteforcer.rb <example.com>"
+   puts "ruby sub_bruteforcer.rb <example.com>"
 end
 
 puts "\n"
