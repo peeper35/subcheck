@@ -2,17 +2,22 @@
 require 'open-uri'
 require 'rest-client'
 
-puts "\n"
-puts"--- --- --- --- --- --- --- --- --- --- --- --- --- --- ---"
-puts "Generating Subdomain Wordlist.."
-puts"--- --- --- --- --- --- --- --- --- --- --- --- --- --- ---"
-
    arr = []
    arg = ARGV
 
      for a in arg  
       base = "." + a
      end
+
+if arg.nil?
+   puts "Usage:\n"
+   puts "uby sub_bruteforcer.rb <example.com>"
+end
+
+puts "\n"
+puts"--- --- --- --- --- --- --- --- --- --- --- --- --- --- ---"
+puts "Generating Subdomain Wordlist.."
+puts"--- --- --- --- --- --- --- --- --- --- --- --- --- --- ---"
 
     get_subs = open("https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/DNS/subdomains-top1mil-110000.txt").read
     
