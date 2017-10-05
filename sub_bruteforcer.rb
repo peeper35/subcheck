@@ -5,16 +5,14 @@ require 'rest-client'
    arr = []
    arg = ARGV
 
-if arg.nil?
+     for a in arg  
+      base = a
+     end
+
+if base.nil?
    puts "Usage:\n"
    puts "ruby sub_bruteforcer.rb <example.com>"
 end
-
-else
-
-     for a in arg  
-      base = "." + a
-     end
 
 puts "\n"
 puts"--- --- --- --- --- --- --- --- --- --- --- --- --- --- ---"
@@ -39,7 +37,7 @@ sleep(2)
  
     arr.each do |sub|
       begin
-        check = RestClient.get("http://" + sub.to_s + base)
+        check = RestClient.get("http://" + sub.to_s + "." + base)
          if check.code == 200 || check.code == 302 || check.code == 301 
            puts "Subdomain Found := #{sub.to_s}"+"#{base}"
          end 
@@ -51,4 +49,3 @@ sleep(2)
 
 puts "\nCompleted."
 sleep(4)
-end
