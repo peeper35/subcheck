@@ -14,15 +14,24 @@ def bold;           "\e[1m#{self}\e[22m" end
 end
 
   arr = Array.new
+  arg0 = ARGV[0]
+  arg1 = ARGV[2]
   base = ARGV[1]
   word = ARGV[3]
 
-   if  base.nil?
+if arg0 == '-d'
+  if  base.nil?
       puts "\n"
       puts "Usage: ruby sub_bruteforcer.rb -u <example.com>".bold.red
       puts "Usage for custom wordlist: ruby sub_bruteforcer.rb -u <example.com> -w <wordlist>".bold
       exit
    end
+else
+      puts "\n"
+      puts "Usage: ruby sub_bruteforcer.rb -u <example.com>".bold.red
+      puts "Usage for custom wordlist: ruby sub_bruteforcer.rb -u <example.com> -w <wordlist>".bold
+      exit
+end
    
    if word.nil?
        puts "\n"
