@@ -15,7 +15,6 @@ end
 
   arr = Array.new
   arg0 = ARGV[0]
-  arg1 = ARGV[2]
   base = ARGV[1]
   word = ARGV[3]
 
