@@ -1,7 +1,7 @@
 # sub_bruteforcer
 
 A simple ruby script for bruteforcing subdomains. 
-This script a wordlist from the ` SecLists ` repo and then it checks for all the available subdomains.
+This script uses a wordlist from the ` SecLists ` repo and then it checks for all the available subdomains.
 
 # Multi Threaded
 
