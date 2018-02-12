@@ -22,13 +22,13 @@ if arg0 == '-d'
   if  base.nil?
       puts "\n"
       puts "Usage: ruby sub_bruteforcer.rb -d <example.com>".bold.red
-      puts "Usage for custom wordlist: ruby sub_bruteforcer.rb -u <example.com> -w <wordlist>".bold
+      puts "Usage for custom wordlist: ruby sub_bruteforcer.rb -d <example.com> -w <wordlist>".bold
       exit
    end
 else
       puts "\n"
       puts "Usage: ruby sub_bruteforcer.rb -d <example.com>".bold.red
-      puts "Usage for custom wordlist: ruby sub_bruteforcer.rb -u <example.com> -w <wordlist>".bold
+      puts "Usage for custom wordlist: ruby sub_bruteforcer.rb -d <example.com> -w <wordlist>".bold
       exit
 end
    
