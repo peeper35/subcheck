@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
-require 'concurrent'
+require 'thread/pool'
 require 'open-uri'
 require 'rest-client'
+
+tpool = Thread.pool(5)
 
 class String
 
@@ -67,17 +69,10 @@ end
  puts "\n"
 
  sleep(2)
-
- 
-pool = Concurrent::ThreadPoolExecutor.new(
-   min_threads: 3, 
-   max_threads: 10, 
-   max_queue: 100,
-   fallback_policy: :caller_runs 
-)
   
     arr.each do |sub|
-     pool.post do
+     tpool.process do
+     sleep 1
       begin
         check = RestClient.get("http://" + sub.to_s + "." + base)
          if check.code == 200 || check.code == 302 || check.code == 301 || check.code == 404 || check.code == 403 
@@ -87,6 +82,8 @@ pool = Concurrent::ThreadPoolExecutor.new(
       next
      end
      end
-    end 
+     end
 
+tpool.shutdown
+    
  sleep(2)
