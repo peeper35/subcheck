@@ -20,6 +20,7 @@ def check(d, w)
 
   if w.nil?
        puts "\n[+] Using default wordlist. [+]".brown
+       sleep 1
    end
 end
 
