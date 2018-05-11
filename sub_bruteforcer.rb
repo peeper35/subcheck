@@ -40,7 +40,7 @@ end
 
 def startbruteforce(domain)
 	tpool = Thread.pool(5)
-	puts "\nGenerating Subdomain Wordlist, #{genwordlist(words = ARGV[3]).length} items.\n".blue
+	puts "\nGenerated Subdomain Wordlist, #{genwordlist(words = ARGV[3]).length} items.\n".blue
 	sleep 2
 	puts "Bruteforcing Now.\n".blue
 	genwordlist(words = ARGV[3]).each do |subd|
