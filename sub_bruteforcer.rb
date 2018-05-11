@@ -27,15 +27,13 @@ end
 
 def genwordlist(w)
 	wordlistarr = Array.new
-
-	if w.nil?
-       File.open("wordlist.txt").each_line {|s| wordlistarr << s}
-       wordlistarr.map! { |each| each.gsub(/\n/, '') }
-   else 
-       File.open("#{w}").each_line {|s| wordlistarr << s}
-       wordlistarr.map! { |each| each.gsub(/\n/, '') }
-   end
-
+        if w.nil?
+       	  File.open("wordlist.txt").each_line {|s| wordlistarr << s}
+       	  wordlistarr.map! { |each| each.gsub(/\n/, '') }
+        else 
+          File.open("#{w}").each_line {|s| wordlistarr << s}
+          wordlistarr.map! { |each| each.gsub(/\n/, '') }
+        end
    return wordlistarr
 end
 
