@@ -19,7 +19,7 @@ def check(d, w)
   end
 
   if w.nil?
-       puts "\nUsing default wordlist.".brown
+       puts "\n[+] Using default wordlist. [+]".brown
    end
 end
 
@@ -39,17 +39,18 @@ end
 
 def startbruteforce(dom)
 	tpool = Thread.pool(5)
-	puts "\nGenerating Subdomain Wordlist.\n".blue
+	puts "\n[+] Generating Subdomain Wordlist.\n".blue
 	sleep 2
-	puts "Bruteforcing Now.\n".blue
+	puts "[+] Bruteforcing Now.\n".blue
 	genwordlist(words = ARGV[3]).each do |sub|
 		tpool.process do
 			cont = 0
 			sleep 1
 			begin
 				check = RestClient.get("http://" + sub.to_s + "." + dom.to_s)
-				if check.code == 200 || check.code == 302 || check.code == 301 || check.code == 404 || check.code == 403 
-					puts " Subdomain Found =>".bold + " " + "#{sub.to_s}"+"."+dom.to_s
+				if check.code == 200 || check.code == 302 || check.code == 301 || check.code == 404 || check.code == 403
+					cont += 1
+					puts "[#{cont}] Subdomain Found =>".bold + " " + "#{sub.to_s}"+"."+dom.to_s
 				end 
 			rescue 
 			next
