@@ -3,8 +3,6 @@ require 'thread/pool'
 require 'open-uri'
 require 'rest-client'
 
-$tpool = Thread.pool(5)
-
 class String
 def red;            "\e[31m#{self}\e[0m" end
 def green;          "\e[32m#{self}\e[0m" end
@@ -27,22 +25,25 @@ end
 
 def genwordlist(w)
 	wordlistarr = Array.new
-        if w.nil?
-       	  File.open("wordlist.txt").each_line {|s| wordlistarr << s}
-       	  wordlistarr.map! { |each| each.gsub(/\n/, '') }
-        else 
-          File.open("#{w}").each_line {|s| wordlistarr << s}
-          wordlistarr.map! { |each| each.gsub(/\n/, '') }
-        end
+
+	if w.nil?
+       File.open("wordlist.txt").each_line {|s| wordlistarr << s}
+       wordlistarr.map! { |each| each.gsub(/\n/, '') }
+   else 
+       File.open("#{w}").each_line {|s| wordlistarr << s}
+       wordlistarr.map! { |each| each.gsub(/\n/, '') }
+   end
+
    return wordlistarr
 end
 
 def startbruteforce(dom)
+	tpool = Thread.pool(5)
 	puts "\nGenerating Subdomain Wordlist.\n".blue
 	sleep 2
 	puts "Bruteforcing Now.\n".blue
 	genwordlist(words = ARGV[3]).each do |sub|
-		$tpool.process do
+		tpool.process do
 			cont = 0
 			sleep 1
 			begin
@@ -55,9 +56,8 @@ def startbruteforce(dom)
 			end
 		end
 	end
+	tpool.shutdown
 end
 
 check(domain = ARGV[1], wordloc = ARGV[3])
-genwordlist(words = ARGV[3])
 startbruteforce(domain = ARGV[1])
-$tpool.shutdown
