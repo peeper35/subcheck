@@ -11,47 +11,45 @@ def brown;          "\e[33m#{self}\e[0m" end
 def bold;           "\e[1m#{self}\e[22m" end
 end
 
-def check(d, w)
-  if d.nil?
-      puts "\nUsage: ruby sub_bruteforcer.rb -d <example.com>".bold.red
-      puts "Usage for custom wordlist: ruby sub_bruteforcer.rb -d <example.com> -w <wordlist>".bold
+def check(domain, wordfile)
+  if domain.nil?
+      puts "\nUsage: ruby sub_bruteforcer.rb -d <example.com>".red
+      puts "Usage for custom wordlist: ruby sub_bruteforcer.rb -d <example.com> -w <wordlist>"
       exit
   end
 
-  if w.nil?
-       puts "\n[+] Using default wordlist. [+]".brown
+  if wordfile.nil?
+       puts "\n[+] Using default wordlist.".brown
        sleep 1
    end
 end
 
-def genwordlist(w)
+def genwordlist(wordfile)
 	wordlistarr = Array.new
 
-	if w.nil?
-       File.open("wordlist.txt").each_line {|s| wordlistarr << s}
+	if wordfile.nil?
+       File.open("wordlist.txt").each_line {|subd| wordlistarr << subd}
        wordlistarr.map! { |each| each.gsub(/\n/, '') }
    else 
-       File.open("#{w}").each_line {|s| wordlistarr << s}
+       File.open("#{wordfile}").each_line {|subd| wordlistarr << subd}
        wordlistarr.map! { |each| each.gsub(/\n/, '') }
    end
 
    return wordlistarr
 end
 
-def startbruteforce(dom)
+def startbruteforce(domain)
 	tpool = Thread.pool(5)
-	puts "\n[+] Generating Subdomain Wordlist.\n".blue
+	puts "\nGenerating Subdomain Wordlist.\n".blue
 	sleep 2
-	puts "[+] Bruteforcing Now.\n".blue
-	genwordlist(words = ARGV[3]).each do |sub|
+	puts "Bruteforcing Now.\n".blue
+	genwordlist(words = ARGV[3]).each do |subd|
 		tpool.process do
-			cont = 0
 			sleep 1
 			begin
-				check = RestClient.get("http://" + sub.to_s + "." + dom.to_s)
+				check = RestClient.get("http://"+subd.to_s+"."+domain.to_s)
 				if check.code == 200 || check.code == 302 || check.code == 301 || check.code == 404 || check.code == 403
-					cont += 1
-					puts "[#{cont}] Subdomain Found =>".bold + " " + "#{sub.to_s}"+"."+dom.to_s
+					puts "Subdomain Found ->"+" "+subd.to_s+"."+domain.to_s
 				end 
 			rescue 
 			next
@@ -61,5 +59,5 @@ def startbruteforce(dom)
 	tpool.shutdown
 end
 
-check(domain = ARGV[1], wordloc = ARGV[3])
-startbruteforce(domain = ARGV[1])
+check(ARGV[1], ARGV[3])
+startbruteforce(ARGV[1])
