@@ -13,8 +13,6 @@ Thanks to SecLists for such an awesome wordlist, I've used one of the wordlist u
 ```
 thread/pool
 
-open-uri
-
 rest-client
 ```
 ## Usage
