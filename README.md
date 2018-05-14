@@ -7,8 +7,6 @@ This script uses a wordlist from the ` SecLists ` repo and then it checks for al
 
 Thanks to SecLists for such an awesome wordlist, I've used one of the wordlist under **/Discovery/DNS/** as the default wordlist here.
 
-**Preferred Ruby Version** : ` ruby 2.4.* `
-
 **Required Gems:**
 ```
 thread/pool
