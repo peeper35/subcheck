@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 require 'thread/pool'
-require 'open-uri'
 require 'rest-client'
 
 class String
