@@ -1,62 +1,64 @@
 #!/usr/bin/env ruby
-require 'thread/pool'
-require 'rest-client'
+require 'optparse'
+require 'resolv'
+require 'socket'
+require 'timeout'
 
-class String
-def red;            "\e[31m#{self}\e[0m" end
-def green;          "\e[32m#{self}\e[0m" end
-def blue;           "\e[34m#{self}\e[0m" end
-def brown;          "\e[33m#{self}\e[0m" end
-def bold;           "\e[1m#{self}\e[22m" end
+ARGV << '-h' if ARGV.empty?
+ARGV << '-h' if !ARGV.include?('-d')
+
+options = {}
+
+if !ARGV.include?('-w')
+  puts "Using default wordlist \n\n"
+  options[:words] = File.readlines('wordlist.txt').map(&:chomp)
 end
 
-def check(domain, wordfile)
-  if domain.nil?
-      puts "\nUsage: ruby sub_bruteforcer.rb -d <example.com>".red
-      puts "Usage for custom wordlist: ruby sub_bruteforcer.rb -d <example.com> -w <wordlist>"
-      exit
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: ruby sub_bruteforcer.rb -d <target domain> // optional -w <wordlist>"
+
+  opts.on("-d", "--domain=<domain>", "Target Domain") do |domain|
+    options[:domain] = domain
   end
 
-  if wordfile.nil?
-       puts "\n[+] Using default wordlist.".brown
-       sleep 1
+  opts.on("-w", "--wordlist=<wordlist>", "Custom Wordlist") do |wordlist|
+  	puts "Using Wordlist #{wordlist} \n\n"
+  	File.expand_path(wordlist)
+	options[:words] = File.readlines(wordlist).map(&:chomp)  
+  end
+
+  opts.on("-s", "--save=<outfile.txt>", "Save output to a file") do |outfile|
+  	puts "Saving output to file #{outfile} \n\n"
+  end
+end.parse!
+
+def host_ip_hash(options)
+   options[:words].each do |word|
+   	_hash = {}
+     begin
+   	  _hash[:host] = word + "." + options[:domain]
+   	  ip = Resolv.getaddress(word + "." + options[:domain])
+   	  _hash[:ip] = ip
+   	  check_alive(_hash)
+   	 rescue Resolv::ResolvError
+   	  next
+   	 end
    end
 end
 
-def genwordlist(wordfile)
-	wordlistarr = Array.new
-
-	if wordfile.nil?
-       File.open("wordlist.txt").each_line {|subd| wordlistarr << subd}
-       wordlistarr.map! { |each| each.gsub(/\n/, '') }
-   else 
-       File.open("#{wordfile}").each_line {|subd| wordlistarr << subd}
-       wordlistarr.map! { |each| each.gsub(/\n/, '') }
-   end
-
-   return wordlistarr
+def check_alive(_host_ip_hash)
+  	begin
+    Timeout::timeout(2) do
+      begin
+        sock = TCPSocket.new(_host_ip_hash[:ip], 80)
+        puts _host_ip_hash[:host] + ", " + _host_ip_hash[:ip]
+        sock.close
+      rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+      end
+    end
+    rescue Timeout::Error
+    end
 end
 
-def startbruteforce(domain)
-	tpool = Thread.pool(5)
-	puts "\nGenerated Subdomain Wordlist, #{genwordlist(words = ARGV[3]).length} items.\n".blue
-	sleep 2
-	puts "Bruteforcing Now.\n".blue
-	genwordlist(words = ARGV[3]).each do |subd|
-		tpool.process do
-			sleep 1
-			begin
-				check = RestClient.get("http://"+subd.to_s+"."+domain.to_s)
-				if check.code == 200 || check.code == 302 || check.code == 301 || check.code == 404 || check.code == 403
-					puts "Subdomain Found ->"+" "+subd.to_s+"."+domain.to_s
-				end 
-			rescue 
-			next
-			end
-		end
-	end
-	tpool.shutdown
-end
-
-check(ARGV[1], ARGV[3])
-startbruteforce(ARGV[1])
+host_ip_hash(options)
