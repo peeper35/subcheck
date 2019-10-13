@@ -12,7 +12,7 @@ options = {}
 
 
 OptionParser.new do |opts|
-  opts.banner = "Usage: ruby sub_bruteforcer.rb -d <target domain> // optional -w <wordlist>"
+  opts.banner = "Usage: ruby sub_bruteforcer.rb -d <target domain> // optional -w <wordlist> -o <outfile>"
 
   opts.on("-d", "--domain=<domain>", "Target Domain") do |domain|
     options[:domain] = domain
