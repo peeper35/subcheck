@@ -9,10 +9,6 @@ ARGV << '-h' if !ARGV.include?('-d')
 
 options = {}
 
-if !ARGV.include?('-w')
-  puts "Using default wordlist \n\n"
-  options[:words] = File.readlines('wordlist.txt').map(&:chomp)
-end
 
 
 OptionParser.new do |opts|
@@ -24,14 +20,19 @@ OptionParser.new do |opts|
 
   opts.on("-w", "--wordlist=<wordlist>", "Custom Wordlist") do |wordlist|
   	puts "Using Wordlist #{wordlist} \n\n"
-  	File.expand_path(wordlist)
-	options[:words] = File.readlines(wordlist).map(&:chomp)  
+	options[:words] = File.readlines(File.expand_path(wordlist)).map(&:chomp)  
   end
 
-  opts.on("-s", "--save=<outfile.txt>", "Save output to a file") do |outfile|
+  opts.on("-o", "--outfile=<outfile.txt>", "Save output to a file") do |outfile|
   	puts "Saving output to file #{outfile} \n\n"
+  	options[:outfile] = outfile
   end
 end.parse!
+
+if !options[:words]
+  puts "Using default wordlist \n\n"
+  options[:words] = File.readlines('wordlist.txt').map(&:chomp)
+end
 
 def host_ip_hash(options)
    options[:words].each do |word|
@@ -40,19 +41,23 @@ def host_ip_hash(options)
    	  _hash[:host] = word + "." + options[:domain]
    	  ip = Resolv.getaddress(word + "." + options[:domain])
    	  _hash[:ip] = ip
-   	  check_alive(_hash)
+   	  check_alive(_hash, options)
    	 rescue Resolv::ResolvError
    	  next
    	 end
    end
 end
 
-def check_alive(_host_ip_hash)
+def check_alive(_host_ip_hash, options)
   	begin
     Timeout::timeout(2) do
       begin
         sock = TCPSocket.new(_host_ip_hash[:ip], 80)
         puts _host_ip_hash[:host] + ", " + _host_ip_hash[:ip]
+           if options[:outfile]
+	          otf = File.open(options[:outfile], "a")
+	          otf << _host_ip_hash[:host] + ", " + _host_ip_hash[:ip] + "\n"
+	       end
         sock.close
       rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
       end
