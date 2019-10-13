@@ -1,4 +1,4 @@
-# sub_bruteforcer
+# subcheck.rb
 
 A simple ruby script for bruteforcing subdomains. 
 This script uses a wordlist from the ` SecLists ` repo and then it checks for all the available subdomains.
@@ -20,16 +20,16 @@ timeout
 ## Usage
 
 ``` 
-$ ruby sub_bruteforcer.rb -d <target domain>
+$ ruby subcheck.rb -d <target domain>
 ```
 **Custom wordlist:**
 ```
-$ ruby sub_bruteforcer.rb -d <target domain> -w <wordlist>
+$ ruby subcheck.rb -d <target domain> -w <wordlist>
 ```
 
 **Saving output to file:**
 ```
-$ ruby sub_bruteforcer.rb -d <target domain> -o <outfile>
+$ ruby subcheck.rb -d <target domain> -o <outfile>
 ```
 
 *Without angle brackets*
