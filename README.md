@@ -9,18 +9,27 @@ Thanks to SecLists for such an awesome wordlist, I've used one of the wordlist u
 
 **Required Gems:**
 ```
-thread/pool
+optparse
 
-rest-client
+resolv
+
+socket
+
+timeout
 ```
 ## Usage
 
 ``` 
-$ ruby sub_bruteforcer.rb -d <example.com>
+$ ruby sub_bruteforcer.rb -d <target domain>
 ```
 **Custom wordlist:**
 ```
-$ ruby sub_bruteforcer.rb -d <example.com> -w <wordlist>
+$ ruby sub_bruteforcer.rb -d <target domain> -w <wordlist>
+```
+
+**Saving output to file:**
+```
+$ ruby sub_bruteforcer.rb -d <target domain> -o <outfile>
 ```
 
 *Without angle brackets*
