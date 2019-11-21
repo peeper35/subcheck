@@ -35,10 +35,11 @@ if !options[:words]
 end
 
 def host_ip_hash(options)
-   options[:words].each do |word|
+   options[:words].each_with_index do |word, index|
    	_hash = {}
      begin
    	  _hash[:host] = word + "." + options[:domain]
+          _hash[:count_index] = index
    	  ip = Resolv.getaddress(word + "." + options[:domain])
    	  _hash[:ip] = ip
    	  check_alive(_hash, options)
@@ -53,7 +54,7 @@ def check_alive(_host_ip_hash, options)
     Timeout::timeout(2) do
       begin
         sock = TCPSocket.new(_host_ip_hash[:ip], 80)
-        puts _host_ip_hash[:host] + ", " + _host_ip_hash[:ip]
+        puts "[" + _host_ip_hash[:count_index].to_s + "] " + _host_ip_hash[:host] + ", " + _host_ip_hash[:ip]
            if options[:outfile]
 	          otf = File.open(options[:outfile], "a")
 	          otf << _host_ip_hash[:host] + ", " + _host_ip_hash[:ip] + "\n"
